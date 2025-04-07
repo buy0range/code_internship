@@ -36,8 +36,8 @@ if __name__ == "__main__":
         """简单的打印输出"""
         print(f"[{datetime.now().strftime('%H:%M:%S.%f')[:-3]}] Received: "
               f"Time={data['time']:.2f}s, "
-              f"F_in={data['F_in']:.5f}, "
-              f"Displacement={data['Displacement']:.5f}")
+              f"Friction={data['F_out']:.5f}, "
+              f"Coefficient={data['coe']:.5f}")
 
     # 开始模拟（参数说明：）
     # friction.csv - 数据文件
