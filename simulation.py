@@ -1,46 +1,30 @@
-import csv
+import pandas as pd
 import time
-from datetime import datetime
 
-def simulate_realtime_data(csv_file, callback, speed=1.0):
-    """
-    模拟实时数据流
-    :param csv_file: CSV文件路径
-    :param callback: 数据处理回调函数
-    :param speed: 时间加速倍数（1.0表示实时，2.0表示2倍速）
-    """
-    # 读取CSV数据并转换为字典列表
-    with open(csv_file, 'r') as f:
-        reader = csv.DictReader(f)
-        data = [row for row in reader]
+def simulate_realtime_data(data_path, time_column):
+    # 读取数据
+    data = pd.read_csv(data_path)
+    df = data[['Time', 'coe']]
+    records = data.to_dict('records')
+    relative_times = data[time_column].tolist()
+    
+    if len(records) == 0:
+        print("数据为空，无法回放。")
+        return
+    
+    # 计算时间间隔（第一个数据立即发送）
+    start_time = time.time()
+    
+    for record in records:
+        target_time = start_time + record[time_column]
+        current_time = time.time()
+        wait_time = target_time - current_time
+        
+        if wait_time > 0:
+            time.sleep(wait_time)
+        
+        # 此处替换为实际的数据发送逻辑
+        print(f"时间：{time.time() - start_time:.3f}s, 数据：{record}")
 
-    prev_time = 0.0
-    for i, row in enumerate(data):
-        # 转换数据类型
-        current_time = float(row['time'])
-        values = {k: float(v) for k, v in row.items()}
-
-        # 计算时间间隔（根据实际时间差）
-        if i > 0:
-            delay = (current_time - prev_time) / speed
-            time.sleep(delay)
-
-        # 调用回调函数处理数据（可自定义）
-        callback(values)
-
-        prev_time = current_time
-
-if __name__ == "__main__":
-    # 示例回调函数 - 可替换为实际处理逻辑
-    def print_data(data):
-        """简单的打印输出"""
-        print(f"[{datetime.now().strftime('%H:%M:%S.%f')[:-3]}] Received: "
-              f"Time={data['time']:.2f}s, "
-              f"Friction={data['F_out']:.5f}, "
-              f"Coefficient={data['coe']:.5f}")
-
-    # 开始模拟（参数说明：）
-    # friction.csv - 数据文件
-    # print_data - 数据处理函数
-    # speed=1.0 - 实时速度
-    simulate_realtime_data('friction.csv', print_data, speed=1.0)
+# 使用示例
+simulate_realtime_data('original_data.csv', 'Time')
