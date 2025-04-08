@@ -4,8 +4,8 @@ import time
 def simulate_realtime_data(data_path, time_column):
     # 读取数据
     data = pd.read_csv(data_path)
-    df = data[['Time', 'coe']]
-    records = data.to_dict('records')
+    df = data[['Time', 'coe','Absolute_Energy']]
+    records = df.to_dict('records')
     relative_times = data[time_column].tolist()
     
     if len(records) == 0:
@@ -24,7 +24,7 @@ def simulate_realtime_data(data_path, time_column):
             time.sleep(wait_time)
         
         # 此处替换为实际的数据发送逻辑
-        print(f"时间：{time.time() - start_time:.3f}s, 数据：{record}")
+        print(record)
 
-# 使用示例
+
 simulate_realtime_data('original_data.csv', 'Time')
