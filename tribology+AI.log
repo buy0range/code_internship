@@ -1,2 +1,0 @@
-{"record_id": 0, "iter_per_learner": 1, "logged_metric": {"pred_time": 0.0003842200929263853}, "trial_time": 3.1925153732299805, "wall_clock_time": 3.255542755126953, "validation_loss": 0.057783018867924515, "config": {"n_estimators": 632, "max_features": 1.0, "max_leaves": 1360, "criterion": "entropy"}, "learner": "rf", "sample_size": 796}
-{"curr_best_record_id": 0}
